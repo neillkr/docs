@@ -1,0 +1,44 @@
+---
+title: "Authentication"
+description: "Authenticate requests to the Kai Affective Intelligence API"
+---
+
+All requests to the Kai Affective Intelligence API require a Bearer token. Your API key is issued per organisation at onboarding.
+
+## Base URL
+
+```
+https://api.togetherwithkai.com/v1/affective
+```
+
+## Bearer token
+
+Include your API key in the `Authorization` header of every request:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+<Warning>
+  Store your API key securely in your platform's keystore. Never expose it in client-side code or public repositories.
+</Warning>
+
+## Endpoint groups
+
+The API has six endpoints in two groups:
+
+| Group | Endpoints | Purpose |
+| --- | --- | --- |
+| Ingestion | `POST /ingest/batch`, `POST /ingest/stream`, `GET /ingest/status` | Receive content from your platform and feed Kai Brain |
+| Output | `GET /pulse`, `GET /alerts`, `POST /configure` | Return aggregated signals to your dashboard or plugin |
+
+## Example request
+
+```bash
+curl -X GET "https://api.togetherwithkai.com/v1/affective/pulse?window=30d&layers=all" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+<Tip>
+  Admin-only endpoints (`POST /configure`) require an API key with admin role permissions.
+</Tip>

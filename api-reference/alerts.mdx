@@ -1,0 +1,62 @@
+---
+title: "GET /alerts"
+description: "Returns active Fast Brain flags and at-risk signals"
+api: "GET /alerts"
+---
+
+Returns active Fast Brain flags and at-risk signals. Anonymised — no individual user data.
+
+## Query parameters
+
+<ParamField query="severity" type="string" default="all">
+  Filter by severity: `spike`, `crisis`, or `all`.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="20">
+  Maximum alerts to return.
+</ParamField>
+
+## Response
+
+<ResponseField name="alerts" type="array">
+  Array of `{severity, theme, count, delta, recommended_action}` objects.
+</ResponseField>
+
+<ResponseField name="flagged_count" type="integer">
+  Users with active Fast Brain flags (anonymised count).
+</ResponseField>
+
+<ResponseField name="at_risk_pct" type="float">
+  Percentage of cohort currently above distress baseline.
+</ResponseField>
+
+## Example
+
+```bash
+curl -X GET "https://api.togetherwithkai.com/v1/affective/alerts?severity=all&limit=20" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+<ResponseExample>
+
+```json Response
+{
+  "alerts": [
+    {
+      "severity": "spike",
+      "theme": "Burnout",
+      "count": 12,
+      "delta": 3.2,
+      "recommended_action": "Schedule a wellbeing check-in with the engineering team lead"
+    }
+  ],
+  "flagged_count": 8,
+  "at_risk_pct": 4.2
+}
+```
+
+</ResponseExample>
+
+<Note>
+  Crisis-level alerts trigger platform native notifications when received via webhook. See the [pricing](/overview/pricing) page for webhook handling pseudocode.
+</Note>

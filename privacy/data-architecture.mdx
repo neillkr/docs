@@ -1,0 +1,43 @@
+---
+title: "Data architecture"
+description: "How Kai processes, aggregates, and transports affective signals"
+---
+
+Kai Affective Intelligence is designed so raw content never persists. Signals are extracted in memory, aggregated at the cohort level, and delivered via REST API.
+
+## Signal source
+
+Customer content streams — Slack messages, WordPress comments, survey responses, support tickets. Content is sent to Kai via `POST /ingest`. Raw text is processed in memory and never written to any database.
+
+## Kai Brain
+
+Kai's emotional intelligence framework classifies each item: mood, psychological state cluster, topic, and distress score. The same framework that powers Kai's AI companion, applied to external content without requiring user history.
+
+## Pseudonymous uids
+
+Model B customers assign a random uid per user before sending content. Kai tracks signals per uid over time to detect trends and escalation. Kai never holds re-identification keys — the customer does.
+
+## Aggregation
+
+Supabase Edge Functions aggregate per-uid signals into cohort-level JSON on a nightly schedule and on-demand. Enforces anonymisation floor before writing to cache.
+
+## Transport
+
+REST API with JSON payloads. Webhook support for real-time escalation alerts via HTTPS POST to customer's nominated endpoint.
+
+## Architecture overview
+
+```
+Content streams → POST /ingest → Kai Brain (in-memory) → Aggregation → Cache → GET /pulse / GET /alerts
+                                      ↓
+                              Webhook alerts (HTTPS POST)
+```
+
+<CardGroup cols={2}>
+  <Card title="Ingestion" icon="upload" href="/api-reference/ingest-batch">
+    Send content batches or real-time streams for analysis.
+  </Card>
+  <Card title="Output" icon="chart-line" href="/api-reference/pulse">
+    Retrieve aggregated mood, state, topic, and action signals.
+  </Card>
+</CardGroup>

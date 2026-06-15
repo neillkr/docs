@@ -1,0 +1,65 @@
+---
+title: "POST /ingest/stream"
+description: "Single-item real-time ingestion for Signal and Brain tiers"
+api: "POST /ingest/stream"
+---
+
+Single-item real-time ingestion for Model B (Signal/Brain tiers). Designed for Slack webhooks where messages arrive individually. Returns a distress score so the connector can act locally if needed.
+
+## Request body
+
+<ParamField body="uid" type="string" required>
+  Pseudonymous user identifier — customer holds the mapping.
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Message or comment text.
+</ParamField>
+
+<ParamField body="ts" type="string">
+  ISO 8601 timestamp of the original message.
+</ParamField>
+
+<ParamField body="source" type="string">
+  Content source label.
+</ParamField>
+
+## Response
+
+<ResponseField name="status" type="string">
+  `recorded`.
+</ResponseField>
+
+<ResponseField name="distress_score" type="float">
+  Score from 0.0–10.0 for this message.
+</ResponseField>
+
+<ResponseField name="alert_fired" type="boolean">
+  `true` if uid crossed alert threshold.
+</ResponseField>
+
+## Example
+
+```bash
+curl -X POST "https://api.togetherwithkai.com/v1/affective/ingest/stream" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "uid": "usr_a1b2c3",
+    "text": "I dont know if anyone would notice if I wasnt here",
+    "ts": "2026-06-15T14:22:00Z",
+    "source": "slack_engineering"
+  }'
+```
+
+<ResponseExample>
+
+```json Response
+{
+  "status": "recorded",
+  "distress_score": 6.8,
+  "alert_fired": false
+}
+```
+
+</ResponseExample>

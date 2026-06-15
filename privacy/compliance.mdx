@@ -1,0 +1,40 @@
+---
+title: "Compliance"
+description: "Privacy, anonymisation, and regulatory alignment"
+---
+
+Kai Affective Intelligence is built for privacy by design. No PII is retained. Aggregated outputs enforce an anonymisation floor. Customers hold all re-identification keys.
+
+## Anonymisation
+
+- Raw text is never stored.
+- Per-uid signals are retained for **90 days** for trend computation, then deleted.
+- Aggregated cache payloads contain no individual data.
+- Anonymisation floor (default: 10 uids) enforced on all outputs.
+
+## PII scrubbing
+
+All inbound text is scanned for emails, phone numbers, and URLs before analysis. Detected PII is stripped before any processing occurs. The `items_scrubbed` field in the [`POST /ingest/batch`](/api-reference/ingest-batch) response reports how many items were affected.
+
+## Data controller
+
+The customer is the data controller for the uid-to-identity mapping. Kai is a data processor. B2B contract specifies this. Kai cannot re-identify any individual from the data it holds.
+
+## Compliance
+
+| Framework | Status |
+| --- | --- |
+| GDPR | Compatible by design — no PII retained, anonymisation floor enforced, customer holds re-identification keys |
+| DPDP Act (India) | Aligned |
+| SOC 2 | Roadmap in progress |
+
+<Note>
+  Kai Affective Intelligence is a product of Together with Kai Inc., a Delaware C-corporation. All data processing is subject to Kai's Privacy Policy and Terms of Service.
+</Note>
+
+## Contact
+
+For compliance questions or integration partner enquiries:
+
+- Website: [togetherwithkai.com](https://togetherwithkai.com)
+- Email: [hello@twkai.app](mailto:hello@twkai.app)

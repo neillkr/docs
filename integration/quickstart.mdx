@@ -1,0 +1,65 @@
+---
+title: "Quickstart"
+description: "Get Kai Affective Intelligence running on your platform in four steps"
+---
+
+The integration is bidirectional. Content flows from your platform into Kai Brain for analysis. Aggregated emotional signals flow back out to your dashboard. All intelligence runs on Kai's servers — you never see individual data from Kai's side.
+
+## Prerequisites
+
+Before you begin, you need:
+
+- A Kai Affective Intelligence API key (issued per organisation at onboarding)
+- Admin access to your host platform (WordPress, Slack, Teams, or custom)
+- Nominated content sources to monitor (channels, comment threads, or survey streams)
+
+## Integration flow
+
+<Steps>
+  <Step title="Install">
+    Admin installs the Kai connector from the platform marketplace or via manual package. A single API key is entered — this ties the connector to the organisation's Kai account and sets the data scope.
+  </Step>
+  <Step title="Configure">
+    Admin nominates which channels, comment threads, or content sources to monitor. Sets anonymisation floor (minimum group size before signals are surfaced), alert thresholds, Kai tone, and which signal layers to include.
+  </Step>
+  <Step title="Ingest">
+    The connector pulls content from nominated sources, strips all identifiers, assigns pseudonymous uids (customer-side — Kai never sees real identities), and sends text batches to `POST /ingest`. Raw text is never stored.
+  </Step>
+  <Step title="Render">
+    The dashboard calls `GET /pulse` on a configurable schedule and renders aggregated signals — mood distribution, psychological states, topic trends, suggested actions — natively inside the host platform.
+  </Step>
+</Steps>
+
+## Platform requirements
+
+<AccordionGroup>
+  <Accordion title="WordPress">
+    PHP 8.0+. WordPress 6.0+. Calls Kai API server-side. Renders dashboard in admin panel or shortcode-embeddable widget.
+  </Accordion>
+  <Accordion title="Slack">
+    Slack App manifest with slash commands and Block Kit rendering. Scheduled Pulse digest posted to nominated channel.
+  </Accordion>
+  <Accordion title="Microsoft Teams">
+    Teams App with adaptive card rendering. Dashboard tab in Teams channel. Alert notifications via bot framework.
+  </Accordion>
+  <Accordion title="Custom / headless">
+    REST API with OpenAPI 3.0 spec. React component library for white-label embed. SDK: JavaScript / Python.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Plugin architecture" icon="diagram-project" href="/integration/plugin-architecture">
+    Understand how content flows in and signals flow out.
+  </Card>
+  <Card title="Admin configuration" icon="sliders" href="/integration/admin-configuration">
+    Configure cohorts, signal layers, and alert thresholds.
+  </Card>
+  <Card title="Authentication" icon="key" href="/api-reference/authentication">
+    Set up Bearer token authentication for API calls.
+  </Card>
+  <Card title="POST /ingest/batch" icon="upload" href="/api-reference/ingest-batch">
+    Send your first content batch for analysis.
+  </Card>
+</CardGroup>

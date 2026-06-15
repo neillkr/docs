@@ -1,0 +1,76 @@
+---
+title: "POST /configure"
+description: "Update your organisation's Affective Intelligence configuration"
+api: "POST /configure"
+---
+
+Updates the organisation's Affective Intelligence configuration. Admin role required.
+
+## Request body
+
+<ParamField body="cohort_filters" type="object" default="{}">
+  Demographic or tag-based cohort definition. Filter by team, department, age range, tenure, or custom tag.
+</ParamField>
+
+<ParamField body="anon_floor" type="integer" default="10">
+  Minimum group size floor. Must be at least 10.
+</ParamField>
+
+<ParamField body="active_layers" type="array" default="all">
+  Signal layers to include: `moods`, `states`, `topics`, `actions`.
+</ParamField>
+
+<ParamField body="alert_threshold" type="float" default="2.0">
+  Distress delta multiplier to trigger alert.
+</ParamField>
+
+<ParamField body="kai_tone" type="string" default="community">
+  Kai's language tone: `community`, `corporate`, or `clinical`.
+</ParamField>
+
+## Response
+
+<ResponseField name="config_id" type="string">
+  Confirmed configuration ID.
+</ResponseField>
+
+<ResponseField name="applied_at" type="string">
+  ISO 8601 timestamp when config takes effect.
+</ResponseField>
+
+<ResponseField name="cohort_size" type="integer">
+  Number of users matching filters.
+</ResponseField>
+
+## Example
+
+```bash
+curl -X POST "https://api.togetherwithkai.com/v1/affective/configure" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cohort_filters": {
+      "department": "engineering"
+    },
+    "anon_floor": 10,
+    "active_layers": ["moods", "states", "topics", "actions"],
+    "alert_threshold": 2.0,
+    "kai_tone": "corporate"
+  }'
+```
+
+<ResponseExample>
+
+```json Response
+{
+  "config_id": "cfg_8f3a2b1c",
+  "applied_at": "2026-06-15T10:00:00Z",
+  "cohort_size": 142
+}
+```
+
+</ResponseExample>
+
+<Warning>
+  If `cohort_size` is below your `anon_floor`, signals will not be surfaced on the dashboard. Expand your cohort filters or increase the monitored user base.
+</Warning>

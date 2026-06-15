@@ -1,0 +1,85 @@
+---
+title: "Pricing"
+description: "Licensing tiers and integration capabilities"
+---
+
+Kai Affective Intelligence is available in three tiers. Each tier builds on the previous one, adding signal layers, configuration options, and integration depth.
+
+## Pulse
+
+**$X / month**
+
+- Community mood spectrum
+- 7d and 30d time windows
+- Anonymised aggregates only
+- Read-only dashboard embed
+- Basic PDF export
+
+## Signal
+
+**$XX / month**
+
+Everything in Pulse, plus:
+
+- Psychological states layer
+- Emerging topics
+- Suggested actions from Kai Brain
+- Webhook alerts for distress spikes
+- Admin configuration panel
+- Slack / Teams integration
+
+## Brain
+
+**Custom pricing**
+
+Everything in Signal, plus:
+
+- White-label Kai Brain for your users
+- Custom Skill Card configuration
+- Kai tone tuned to your context
+- Direct user interactions with Kai
+- Full Passport data for your cohort
+- Dedicated implementation support
+
+## How the plugin works
+
+The following pseudocode illustrates the integration lifecycle from install through configuration.
+
+```javascript
+// PLUGIN BOOT
+ON plugin_installed(api_key, platform):
+  STORE api_key securely in platform keystore
+  CALL POST /configure with default settings
+  REGISTER webhook: kai_signal_webhook_url
+  RENDER dashboard frame in host platform UI
+
+// DASHBOARD LOAD
+ON dashboard_opened(admin_user, window='30d'):
+  token = GET api_key from keystore
+  payload = CALL GET /pulse?window={window}&layers=all
+  IF payload.error: SHOW connection error state
+  RENDER MoodSpectrum(payload.moods)
+  RENDER StateBubbles(payload.states)
+  RENDER TopicTags(payload.topics)
+  RENDER SuggestedActions(payload.actions)
+
+// REAL-TIME ALERTS
+ON webhook_received(alert):
+  IF alert.severity == 'crisis':
+    NOTIFY admin via platform native notification
+    DISPLAY alert banner in dashboard
+  IF alert.severity == 'spike':
+    INCREMENT alert counter in dashboard header
+
+// ADMIN CONFIGURATION
+ON config_saved(admin_user, settings):
+  VALIDATE settings.anon_floor >= 10
+  CALL POST /configure with settings
+  IF response.cohort_size < 10:
+    WARN: cohort too small to show data
+  STORE config_id, REFRESH dashboard
+```
+
+<Tip>
+  Need help choosing a tier? Contact [hello@twkai.app](mailto:hello@twkai.app) to discuss your integration requirements.
+</Tip>

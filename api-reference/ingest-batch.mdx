@@ -1,0 +1,98 @@
+---
+title: "POST /ingest/batch"
+description: "Send a batch of content for analysis"
+api: "POST /ingest/batch"
+---
+
+Send a batch of content (up to 1,000 items) for analysis. Accepts plain text (Model A, Pulse tier) or pseudonymous uid+text pairs (Model B, Signal/Brain tiers). Raw text is never stored — only extracted signals.
+
+## Request body
+
+<ParamField body="source" type="string" required>
+  Label for this content source, e.g. `slack_engineering`.
+</ParamField>
+
+<ParamField body="texts" type="array">
+  Array of plain text strings. Used with Model A (Pulse tier).
+</ParamField>
+
+<ParamField body="messages" type="array">
+  Array of `{uid, text, ts}` objects. Used with Model B (Signal/Brain tiers).
+</ParamField>
+
+<ParamField body="batch_id" type="string">
+  Customer-generated UUID for status tracking.
+</ParamField>
+
+### Message object (Model B)
+
+<ParamField body="uid" type="string" required>
+  Pseudonymous user identifier — customer holds the mapping.
+</ParamField>
+
+<ParamField body="text" type="string" required>
+  Message or comment text.
+</ParamField>
+
+<ParamField body="ts" type="string">
+  ISO 8601 timestamp of the original message.
+</ParamField>
+
+## Response
+
+<ResponseField name="batch_id" type="string">
+  Echo of submitted `batch_id`.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  `processed` or `queued`.
+</ResponseField>
+
+<ResponseField name="items_analysed" type="integer">
+  Number of items successfully processed.
+</ResponseField>
+
+<ResponseField name="items_scrubbed" type="integer">
+  Items where PII was detected and stripped.
+</ResponseField>
+
+<ResponseField name="processed_at" type="string">
+  ISO 8601 timestamp.
+</ResponseField>
+
+## Example
+
+<CodeGroup>
+
+```bash Model A (Pulse tier)
+curl -X POST "https://api.togetherwithkai.com/v1/affective/ingest/batch" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source": "slack_engineering",
+    "batch_id": "550e8400-e29b-41d4-a716-446655440000",
+    "texts": [
+      "Feeling overwhelmed with the sprint deadline",
+      "Really grateful for the team support today"
+    ]
+  }'
+```
+
+```bash Model B (Signal/Brain tier)
+curl -X POST "https://api.togetherwithkai.com/v1/affective/ingest/batch" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source": "slack_engineering",
+    "batch_id": "550e8400-e29b-41d4-a716-446655440000",
+    "messages": [
+      {
+        "uid": "usr_a1b2c3",
+        "text": "Feeling overwhelmed with the sprint deadline",
+        "ts": "2026-06-15T09:30:00Z"
+      }
+    ]
+  }'
+```
+
+</CodeGroup>

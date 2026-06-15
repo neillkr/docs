@@ -1,0 +1,87 @@
+---
+title: "GET /pulse"
+description: "Returns the full community Affective Intelligence payload"
+api: "GET /pulse"
+---
+
+Returns the full community Affective Intelligence payload for the requesting organisation's cohort.
+
+## Query parameters
+
+<ParamField query="window" type="string" default="30d">
+  Time window: `7d`, `30d`, `60d`, or `all`.
+</ParamField>
+
+<ParamField query="layers" type="string" default="moods,states,topics,actions">
+  Comma-separated signal layers to include.
+</ParamField>
+
+<ParamField query="anon_floor" type="integer" default="10">
+  Minimum group size for data to be returned.
+</ParamField>
+
+## Response
+
+<ResponseField name="community_health_score" type="integer">
+  Composite score from 0–100.
+</ResponseField>
+
+<ResponseField name="health_trend" type="string">
+  `up`, `flat`, or `down`.
+</ResponseField>
+
+<ResponseField name="moods" type="array">
+  Array of `{name, pct, count, trend, delta}` objects.
+</ResponseField>
+
+<ResponseField name="states" type="array">
+  Array of `{name, pct, trend, delta, hot}` objects.
+</ResponseField>
+
+<ResponseField name="topics" type="array">
+  Array of `{name, trend, delta, hot}` objects.
+</ResponseField>
+
+<ResponseField name="actions" type="array">
+  Array of `{priority, label, action}` objects.
+</ResponseField>
+
+<ResponseField name="generated_at" type="string">
+  ISO 8601 timestamp.
+</ResponseField>
+
+## Example
+
+```bash
+curl -X GET "https://api.togetherwithkai.com/v1/affective/pulse?window=30d&layers=all" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+<ResponseExample>
+
+```json Response
+{
+  "community_health_score": 72,
+  "health_trend": "up",
+  "moods": [
+    { "name": "Joy", "pct": 47, "count": 145, "trend": "up", "delta": 4 },
+    { "name": "Hope", "pct": 24, "count": 74, "trend": "flat", "delta": 0 }
+  ],
+  "states": [
+    { "name": "Loneliness", "pct": 29, "trend": "flat", "delta": 0, "hot": false }
+  ],
+  "topics": [
+    { "name": "Feeling replaceable", "trend": "up", "delta": 8, "hot": true }
+  ],
+  "actions": [
+    {
+      "priority": 1,
+      "label": "Wanting to be seen at +6%",
+      "action": "Activate peer matching for users sharing this theme"
+    }
+  ],
+  "generated_at": "2026-06-15T00:00:00Z"
+}
+```
+
+</ResponseExample>

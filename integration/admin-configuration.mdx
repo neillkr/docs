@@ -1,0 +1,53 @@
+---
+title: "Admin configuration"
+description: "Shape your Kai Affective Intelligence experience without writing code"
+---
+
+The plugin ships with a visual configuration panel — the **model maker** — that allows the organisation's admin to shape their own Kai Affective Intelligence experience without writing code. This is the B2B product's key differentiator: Kai's intelligence is configurable, not one-size-fits-all.
+
+## Configuration options
+
+<AccordionGroup>
+  <Accordion title="Cohort builder">
+    Filter by team, department, age range, tenure, or custom tag. Define which users contribute to the aggregated signals displayed on your dashboard.
+  </Accordion>
+  <Accordion title="Signal layer toggles">
+    Show moods only, or include psychological states and topics. Control which of the four dashboard layers are active for your organisation.
+  </Accordion>
+  <Accordion title="Anonymisation floor">
+    Set minimum group size before data is surfaced. Default: **10**. If the cohort matching your filters falls below this threshold, signals are suppressed to protect individual privacy.
+  </Accordion>
+  <Accordion title="Kai tone selector">
+    Configure Kai's language for corporate wellness, clinical, or community contexts. Available values: `community`, `corporate`, `clinical`.
+  </Accordion>
+  <Accordion title="Skill Card enablement">
+    Choose which Kai Brain skill cards are active for this cohort. Available on Signal and Brain tiers.
+  </Accordion>
+  <Accordion title="Alert thresholds">
+    Set the distress delta that triggers a team notification. Default: **2.0** multiplier above baseline.
+  </Accordion>
+  <Accordion title="Export cadence">
+    Weekly PDF digest, Slack summary, or email report on schedule.
+  </Accordion>
+</AccordionGroup>
+
+## Saving configuration
+
+When an admin saves settings, the plugin validates and sends them to the API:
+
+```javascript
+ON config_saved(admin_user, settings):
+  VALIDATE settings.anon_floor >= 10
+  CALL POST /configure with settings
+  IF response.cohort_size < 10:
+    WARN: cohort too small to show data
+  STORE config_id, REFRESH dashboard
+```
+
+<Warning>
+  If `cohort_size` is below your anonymisation floor after saving, the dashboard will warn that the cohort is too small to show data. Expand your filters or increase the monitored user base before signals can be surfaced.
+</Warning>
+
+## API reference
+
+Configuration is persisted via [`POST /configure`](/api-reference/configure). See the endpoint documentation for the full parameter schema and response fields.

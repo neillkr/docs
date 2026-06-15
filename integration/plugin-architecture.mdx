@@ -1,0 +1,54 @@
+---
+title: "Plugin architecture"
+description: "How Kai Affective Intelligence integrates with your platform"
+---
+
+The integration is bidirectional. Content flows from the customer's platform into Kai Brain for analysis. Aggregated emotional signals flow back out to the customer's dashboard. The connector handles the inbound stream. The plugin renders the outbound signals. All intelligence runs on Kai's servers — the customer never sees individual data.
+
+## Data flow
+
+```
+CUSTOMER CONTENT          KAI CONNECTOR              KAI BRAIN                KAI API              DASHBOARD
+Slack messages     →    Strips identifiers    →   Mood · States       →   GET /pulse      →   Mood spectrum
+WP comments               Assigns uid               Topics · Trends          GET /alerts         State bubbles
+Surveys                   POST /ingest              Alert detection                              Topic tags
+                                                                                                    Suggested actions
+```
+
+## Components
+
+<CardGroup cols={2}>
+  <Card title="Kai connector" icon="plug">
+    Handles the inbound content stream. Pulls content from nominated sources, strips identifiers, assigns pseudonymous uids, and sends batches to `POST /ingest`.
+  </Card>
+  <Card title="Kai Brain" icon="brain">
+    Runs on Kai's servers. Classifies each item for mood, psychological state, topic, and distress score using the same emotional intelligence framework that powers Kai's AI companion.
+  </Card>
+  <Card title="Kai API" icon="server">
+    Exposes ingestion endpoints (`POST /ingest`) and output endpoints (`GET /pulse`, `GET /alerts`) for the plugin to consume.
+  </Card>
+  <Card title="Dashboard plugin" icon="chart-pie">
+    Renders aggregated signals natively inside the host platform UI. Calls `GET /pulse` on a configurable schedule.
+  </Card>
+</CardGroup>
+
+## Integration lifecycle
+
+<Steps>
+  <Step title="Install">
+    Admin installs the Kai connector from the platform marketplace or via manual package. A single API key ties the connector to the organisation's Kai account.
+  </Step>
+  <Step title="Configure">
+    Admin nominates content sources, sets anonymisation floor, alert thresholds, Kai tone, and signal layers via the [admin configuration panel](/integration/admin-configuration).
+  </Step>
+  <Step title="Ingest">
+    The connector sends text batches to `POST /ingest`. Raw text is processed in memory and never stored.
+  </Step>
+  <Step title="Render">
+    The dashboard plugin calls `GET /pulse` and renders mood distribution, psychological states, topic trends, and suggested actions.
+  </Step>
+</Steps>
+
+<Note>
+  Model A (Pulse tier) sends plain text arrays. Model B (Signal/Brain tiers) sends pseudonymous `{uid, text, ts}` objects so Kai can track per-user trends without holding re-identification keys.
+</Note>

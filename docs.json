@@ -11,43 +11,82 @@
   "navigation": {
     "pages": [
       {
-        "group": "Getting Started",
+        "group": "Overview",
         "pages": [
           "index",
-          "quickstart"
+          "overview/introduction",
+          "overview/dashboard",
+          "overview/pricing"
+        ]
+      },
+      {
+        "group": "Integration",
+        "pages": [
+          "integration/quickstart",
+          "integration/plugin-architecture",
+          "integration/admin-configuration"
+        ]
+      },
+      {
+        "group": "API Reference",
+        "pages": [
+          "api-reference/authentication",
+          {
+            "group": "Ingestion",
+            "pages": [
+              "api-reference/ingest-batch",
+              "api-reference/ingest-stream",
+              "api-reference/ingest-status"
+            ]
+          },
+          {
+            "group": "Output",
+            "pages": [
+              "api-reference/pulse",
+              "api-reference/alerts",
+              "api-reference/configure"
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Privacy",
+        "pages": [
+          "privacy/data-architecture",
+          "privacy/compliance"
         ]
       }
     ],
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Website",
+          "href": "https://togetherwithkai.com",
+          "icon": "globe"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Contact",
+          "href": "mailto:hello@twkai.app",
+          "icon": "envelope"
         }
       ]
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/kai_logo_180pixels.png",
+    "dark": "/logo/kai_logo_180pixels.png"
   },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:hello@twkai.app"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "label": "Get started",
+      "href": "/integration/quickstart"
     }
   },
   "contextual": {
@@ -64,9 +103,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "website": "https://togetherwithkai.com"
     }
   }
 }

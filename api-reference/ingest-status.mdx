@@ -1,0 +1,46 @@
+---
+title: "GET /ingest/status"
+description: "Check processing status of a submitted batch"
+api: "GET /ingest/status"
+---
+
+Check processing status of a previously submitted batch.
+
+## Query parameters
+
+<ParamField query="batch_id" type="string" required>
+  UUID returned by `POST /ingest/batch`.
+</ParamField>
+
+## Response
+
+<ResponseField name="status" type="string">
+  `processed`, `queued`, or `failed`.
+</ResponseField>
+
+<ResponseField name="items" type="integer">
+  Total items in batch.
+</ResponseField>
+
+<ResponseField name="included_in_cache" type="boolean">
+  Whether this batch is reflected in `/pulse`.
+</ResponseField>
+
+## Example
+
+```bash
+curl -X GET "https://api.togetherwithkai.com/v1/affective/ingest/status?batch_id=550e8400-e29b-41d4-a716-446655440000" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+<ResponseExample>
+
+```json Response
+{
+  "status": "processed",
+  "items": 847,
+  "included_in_cache": true
+}
+```
+
+</ResponseExample>
