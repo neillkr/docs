@@ -66,7 +66,7 @@
         },
         {
           "anchor": "Contact",
-          "href": "mailto:hello@twkai.app",
+          "href": "mailto:neill@togetherwithkai.com",
           "icon": "envelope"
         }
       ]
@@ -74,7 +74,8 @@
   },
   "logo": {
     "light": "/logo/kai_logo_180pixels.png",
-    "dark": "/logo/kai_logo_180pixels.png"
+    "dark": "/logo/kai_logo_180pixels.png",
+    "href": "https://kaipassport.io/"
   },
   "navbar": {
     "links": [
